@@ -61,6 +61,8 @@ class Predictor {
             double alt;
             double lat;
             double lon; 
+            double u_wind; 
+            double v_wind; 
         };
         
         std::vector<pred_block> vec_blocks; 
@@ -130,15 +132,14 @@ class Predictor {
 
         //calculates lateral model variables (lat and lon) 
         void set_lat_lon(struct pred_block *cur_block){
-            double v_wind;
-            double u_wind;
+            
             double ddlat;
             double ddlon; 
             double theta, r;
            
 
             //get wind components 
-            dataset.get_wind(cur_block->time,cur_block->alt,cur_block->lat,cur_block->lon,&v_wind,&u_wind);
+            dataset.get_wind(cur_block->time,cur_block->alt,cur_block->lat,cur_block->lon,&cur_block->v_wind,&cur_block->u_wind);
 
             //get dd angles 
             // See the differentiation section of
@@ -151,8 +152,8 @@ class Predictor {
             ddlon = (2.0 * M_PI) * r * sin(theta) / 360.0;
 
 
-            cur_block->lat = vec_blocks.back().lat  + (v_wind*timestep)/ddlat; 
-            cur_block->lon = vec_blocks.back().lon  + (u_wind*timestep)/ddlon; 
+            cur_block->lat = vec_blocks.back().lat  + (vec_blocks.back().v_wind*timestep)/ddlat; 
+            cur_block->lon = vec_blocks.back().lon  + (vec_blocks.back().u_wind*timestep)/ddlon; 
 
         }
 
@@ -181,6 +182,7 @@ class Predictor {
             ic_block.alt=0.0;
             ic_block.lat=32.0231;
             ic_block.lon=-8.43268;
+            dataset.get_wind(ic_block.time,ic_block.alt,ic_block.lat,ic_block.lon,&ic_block.v_wind,&ic_block.u_wind);
             // push it back to vector 
             vec_blocks.push_back(ic_block); 
 
@@ -198,7 +200,7 @@ class Predictor {
              
         };
 
-        //set initial condiions 
+        //run sim 
         void run_sim(){
             //assign new prediction block
             struct pred_block cur_block;
