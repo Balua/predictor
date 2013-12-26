@@ -3,9 +3,11 @@
 #include <string>
 #include <math.h>
 
+#define RADIUS_OF_EARTH 6371009.0
 
-class Dataset {
 
+class Weather_Dataset {
+    //data containers
     private:
         enum data_source {nooa, meteo_ist};
         unsigned int uid;
@@ -18,6 +20,7 @@ class Dataset {
         std::vector<double> v_wind_nodes;
 
 
+    //functions
     public:
         //load dataset
         void load(unsigned int UID){
@@ -27,11 +30,13 @@ class Dataset {
         }
 
         //get wind variables for a 4D point
-        void get_wind(double time, double alt, double lat, double lon, double &u_wind, double &v_wind){
-
-
+        void get_wind(const double time, const double alt, const double lat, const double lon, double *v_wind, double *u_wind){
+            //temporary bypass values
+            *v_wind = 1.0;
+            *u_wind = 1.0;
         }
 
+        
         void unload(){
         
 
@@ -40,10 +45,10 @@ class Dataset {
 
 
 
-
 class Predictor {
+    //data containers 
     private:
-        Dataset dataset; 
+        Weather_Dataset dataset; 
         double burst_alt;
         double ascent_rate;
         double drag_coef;
@@ -60,12 +65,12 @@ class Predictor {
         
         std::vector<pred_block> vec_blocks; 
        
-             
 
+             
+    //functions
     private:
         //ISA density
         double get_density(double altitude) {
-    
             double temp = 0.0, pressure = 0.0;
          
             if (altitude > 25000) {
@@ -77,6 +82,7 @@ class Predictor {
                 pressure = 22.65 * exp(1.73-0.000157*altitude);
             }
             if (altitude <=11000) {
+
                 temp = 15.04 - 0.00649 * altitude;
                 pressure = 101.29 * pow((temp + 273.1)/288.08,5.256);
             }
@@ -102,7 +108,6 @@ class Predictor {
                 case burst:
                         cur_block->alt = vec_blocks.back().alt;
                         cur_block->state = descending; 
-                        timestep  = 3.0 ;   //seconds
                         break;
                 case ascending:
                         cur_block->alt = vec_blocks.back().alt + ascent_rate*timestep;
@@ -125,13 +130,38 @@ class Predictor {
 
         //calculates lateral model variables (lat and lon) 
         void set_lat_lon(struct pred_block *cur_block){
+            double v_wind;
+            double u_wind;
+            double ddlat;
+            double ddlon; 
+            double theta, r;
+           
 
+            //get wind components 
+            dataset.get_wind(cur_block->time,cur_block->alt,cur_block->lat,cur_block->lon,&v_wind,&u_wind);
+
+            //get dd angles 
+            // See the differentiation section of
+            // http://en.wikipedia.org/wiki/Spherical_coordinate_system
+            theta = 2.0 * M_PI * (90.0 - cur_block->lat) / 360.0;
+            r = RADIUS_OF_EARTH + cur_block->alt;
+            // d/dv = d/dlat = -d/dtheta
+            ddlat = (2.0 * M_PI) * r / 360.0;
+            // d/du = d/dlong = d/dphi
+            ddlon = (2.0 * M_PI) * r * sin(theta) / 360.0;
+
+
+            cur_block->lat = vec_blocks.back().lat  + (v_wind*timestep)/ddlat; 
+            cur_block->lon = vec_blocks.back().lon  + (u_wind*timestep)/ddlon; 
 
         }
+
 
         void print_block(struct pred_block cur_block){
-            std::cout << cur_block.time << " -> "  <<  cur_block.state <<  " , "  <<  cur_block.alt << " , "  <<  cur_block.lat << " , "  <<  cur_block.lon << std::endl;
+            std::cout.precision(15);
+            std::cout << cur_block.time << ", "  <<  cur_block.state <<  ", "  <<  cur_block.alt << ", "  <<  cur_block.lat << ", "  <<  cur_block.lon << std::endl;
         }
+
 
 
     public:
@@ -170,7 +200,6 @@ class Predictor {
 
         //set initial condiions 
         void run_sim(){
-
             //assign new prediction block
             struct pred_block cur_block;
 
@@ -192,17 +221,8 @@ class Predictor {
         };
 
 
+
 };
-
-
-
-
-
-
-
-
-
-
 
 
 
