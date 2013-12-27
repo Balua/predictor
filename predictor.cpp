@@ -132,7 +132,6 @@ class Predictor {
 
         //calculates lateral model variables (lat and lon) 
         void set_lat_lon(struct pred_block *cur_block){
-            
             double ddlat;
             double ddlon; 
             double theta, r;
@@ -234,7 +233,6 @@ int main(void){
     Predictor pred1;
     pred1.ic_sim();
     pred1.run_sim();
-
 
     return 0;
 };
