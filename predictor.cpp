@@ -24,9 +24,7 @@ class Weather_Dataset {
     public:
         //load dataset
         void load(unsigned int UID){
-         
            uid=UID;
-
         }
 
         //get wind variables for a 4D point
@@ -37,12 +35,8 @@ class Weather_Dataset {
         }
 
         
-        void unload(){
-        
-
-        }
+        void unload(){ }
 };
-
 
 
 class Predictor {
@@ -67,11 +61,10 @@ class Predictor {
         
         std::vector<pred_block> vec_blocks; 
        
-
              
     //functions
     private:
-        //ISA density
+        //ISA density could be implemented using the real atmosphere data
         double get_density(double altitude) {
             double temp = 0.0, pressure = 0.0;
          
@@ -156,7 +149,8 @@ class Predictor {
 
         }
 
-
+        
+        //simple easy print function to output in the right format
         void print_block(struct pred_block cur_block){
             std::cout.precision(15);
             std::cout << cur_block.time << ", "  <<  cur_block.state <<  ", "  <<  cur_block.alt << ", "  <<  cur_block.lat << ", "  <<  cur_block.lon << std::endl;
@@ -198,7 +192,6 @@ class Predictor {
             std::cout << "longitude=" << vec_blocks.back().lon << "W"<< std::endl;
              
         };
-
         //run sim 
         void run_sim(){
             //assign new prediction block
@@ -211,17 +204,14 @@ class Predictor {
             
                 set_altitude(&cur_block);   //set altitude on current block
                 set_lat_lon(&cur_block);    // set lat lon on current block 
-                print_block(vec_blocks.back());  //print last block
+                //print_block(vec_blocks.back());  //print last block
                 
                 vec_blocks.push_back(cur_block);    //add current block to vector of blocks
             }
 
             std::cout << "end of simulation"<< std::endl;
             std::cout << "#blocks=" << vec_blocks.size() << std::endl;
-
         };
-
-
 
 };
 

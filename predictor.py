@@ -3,6 +3,8 @@
 
 # the objective of this script is to fetch wind data from NOAA pydap servers and parse it in a convenient output format for analysis by a faster C routine.
 
+# all shit
+
 import logging
 import sys
 import datetime
@@ -45,24 +47,23 @@ def GetNearDataset(utc_time=datetime.datetime.utcnow()):
     return dataset 
 
 
-
 dataset=GetNearDataset(datetime.datetime.now())
-
-
-#no idea what is this for
-time_origin=origin=datetime.datetime(1,1,1,0,0,0)  #1AC Jan 1
-
-for i in dataset.time:
-	print time_origin+datetime.timedelta(i-2) # have to subtract 2 days since 1AC Jan 0 
-	break
-
-
-print dataset.hgtprs.dimensions
-print dataset.hgtprs.shape
-print dataset.ugrdprs.dimensions
-print dataset.ugrdprs.shape
-print dataset.vgrdprs.dimensions
-print dataset.vgrdprs.shape
+#
+#
+##no idea what is this for
+#time_origin=origin=datetime.datetime(1,1,1,0,0,0)  #1AC Jan 1
+#
+#for i in dataset.time:
+#	print time_origin+datetime.timedelta(i-2) # have to subtract 2 days since 1AC Jan 0 
+#	break
+#
+#
+#print dataset.hgtprs.dimensions
+#print dataset.hgtprs.shape
+#print dataset.ugrdprs.dimensions
+#print dataset.ugrdprs.shape
+#print dataset.vgrdprs.dimensions
+#print dataset.vgrdprs.shape
 
 
 
