@@ -2,6 +2,11 @@
 #include <vector>
 #include <string>
 #include <math.h>
+#include <chrono>
+#include <ctime>
+#include <locale>
+#include "pugixml.hpp"
+#include "pugiconfig.hpp"
 
 
 
@@ -13,15 +18,12 @@ enum state_type {descending=-1,burst,ascending,landed,stop_sim};
 
 struct pred_block {
     enum state_type state;
-    double time;
+    std::string time; 
     double alt;
     double lat;
     double lon; 
     double u_wind; 
     double v_wind; 
 };
-
-
-
 
 

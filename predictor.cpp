@@ -1,6 +1,5 @@
 #include "predictor.h"
 
-
 class Weather_Dataset {
     //data containers
     private:
@@ -40,6 +39,33 @@ class Predictor {
         //read prediction xml 
         void read_predition_xml(double *burst_alt,double *ascent_rate,double *drag_coef,double *timestep,struct pred_block *ic_block){
 
+            std::string source="./data/predictions/example.xml";
+            pugi::xml_document doc;
+            pugi::xml_parse_result result = doc.load_file(source.c_str());
+   
+            if(not result == 1){
+                std::cout << "Load result: " << result.description() << std::endl;
+                exit(-1);
+            } 
+            for (pugi::xml_node tool = doc.child("prediction"); tool; tool = tool.next_sibling("prediction"))
+            {
+                *burst_alt = tool.child("simulation_settings").child("burst_altitude").text().as_double();
+                *ascent_rate= tool.child("simulation_settings").child("ascent_rate").text().as_double();
+                *timestep= tool.child("simulation_settings").child("timestep").text().as_double();
+                *drag_coef= tool.child("simulation_settings").child("drag_coeficient").text().as_double();
+                
+                
+                ic_block->state = static_cast<state_type>(tool.child("initial_conditions").child("state").text().as_int());
+                ic_block->alt = tool.child("initial_conditions").child("altitude").text().as_double();
+                ic_block->lon = tool.child("initial_conditions").child("longitude").text().as_double();
+                ic_block->lat = tool.child("initial_conditions").child("latitude").text().as_double();
+
+                //std::cout <<  std::put_time(std::localtime(&now_c), "%F %T") << std::endl;
+                //std::cout << tool.child("initial_conditions").child("gmt_lauch_time").text().get() << std::endl;
+                 
+
+            }
+    
         };
 
         //ISA density could be implemented using the real atmosphere data
@@ -134,45 +160,11 @@ class Predictor {
 
 
     public:
-        //set hard coded initial condiions 
-        void hard_ic_sim(){
-            struct pred_block ic_block; //temp block
-            
-            //simulation parameters 
-            burst_alt = 30000;  //meters
-            ascent_rate = 10.0;  //(meters/second)          
-            drag_coef = 0.9;
-            timestep  = 1.0 ;   //seconds
-                         
-            //set initialization block 
-            ic_block.state=ascending;
-            ic_block.time=0.0; 
-            ic_block.alt=0.0;
-            ic_block.lat=32.0231;
-            ic_block.lon=-8.43268;
-           
-            dataset.get_wind(&ic_block); //fill wind info
-            
-            vec_blocks.push_back(ic_block); //push it back
-
-            std::cout << "----------Balua Predictor----------" << std::endl;
-            std::cout << "-----Initial Conditions Set-----" << std::endl;   
-            std::cout << "burst_altitude=" << burst_alt << std::endl;
-            std::cout << "ascent_rate=" << ascent_rate << std::endl;
-            std::cout << "drag_coefficient=" << drag_coef << std::endl;
-            std::cout << "timestep=" << timestep << std::endl;
-            std::cout << "state=" << vec_blocks.back().state << std::endl;
-            std::cout << "time=" << vec_blocks.back().time << std::endl;
-            std::cout << "altitude=" << vec_blocks.back().alt << std::endl;
-            std::cout << "latitude=" << vec_blocks.back().lat << "N"<< std::endl;
-            std::cout << "longitude=" << vec_blocks.back().lon << "W"<< std::endl;
-             
-        };
-
         //set initial condiions 
         void ic_sim(){
             struct pred_block ic_block; //temp block
-        
+                        
+
             read_predition_xml(&burst_alt,&ascent_rate,&drag_coef,&timestep,&ic_block);//fill it with xml data 
 
             dataset.get_wind(&ic_block); //fill it with wind conditions
@@ -200,7 +192,7 @@ class Predictor {
             //run until sim stops
             while(vec_blocks.back().state != stop_sim){
 
-                cur_block.time = vec_blocks.back().time + timestep; //set time on current block
+                //cur_block.time = vec_blocks.back().time + std::chrono::seconds(timestep); //set time on current block
             
                 set_altitude(&cur_block);   //set altitude on current block
                 set_lat_lon(&cur_block);    // set lat lon on current block 
@@ -218,15 +210,50 @@ class Predictor {
 
 
 
+
+
+
 int main(void){
 
-    Predictor pred1;
-    pred1.hard_ic_sim();
-    pred1.run_sim();
+//    Predictor pred1;
+//    pred1.ic_sim();
+//    pred1.run_sim();
+//
+//    std::time_t time_t0;
+//    std::chrono::system_clock::time_point t0;
+//
+//
+//
+//    t0 = std::chrono::system_clock::now();
+//    time_t0 = std::chrono::system_clock::to_time_t(t0); 
+//   
+//    //std::time_t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()); 
+//    //std::cout << std::strftime(std::gmtime(&time_t0), "%Y/%m/%d %T")  << std::endl;
+//    char mbstr[256];
+//    if (std::strftime(mbstr, sizeof(mbstr), "%Y/%m/%d %T", std::localtime(&time_t0))) {
+//        std::cout << mbstr << '\n';
+//    }
+//
+
+    using namespace std::chrono;
+
+    duration<int,std::ratio<60*60*24> > one_day (1);
+
+    system_clock::time_point today = system_clock::now();
+    system_clock::time_point tomorrow = today + one_day;
+
+    time_t tt;
+
+    tt = system_clock::to_time_t ( today );
+    std::cout << "today is: " << ctime(&tt);
+
+    tt = system_clock::to_time_t ( tomorrow );
+    std::cout << "tomorrow will be: " << ctime(&tt);
+
+
 
     return 0;
 };
-
 
 
 

@@ -1,7 +1,8 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?> 
+
 <prediction>
     <simulation_settings>
-        <timestep>1</timestep>
+        <timestep>0.5</timestep>
         <drag_coeficient>0.9</drag_coeficient>
         <burst_altitude>30000</burst_altitude>
         <ascent_rate>10.0</ascent_rate>
@@ -12,6 +13,6 @@
         <altitude>312</altitude>
         <latitude>32.0231</latitude>
         <longitude>-8.43268</longitude>
-    <initial_conditions/>
+    </initial_conditions>
 </prediction>
 
