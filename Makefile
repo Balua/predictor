@@ -1,5 +1,10 @@
 all:
-	g++ -Wall -std=c++0x predictor.cpp -o predictor
+	g++-4.8 -Wall -Wextra -std=c++11 main.cpp weather.cpp predictor.cpp -o predictor
+
+
+release:
+	g++-4.8 -Wall -Wextra -std=c++11 -Ofast main.cpp weather.cpp predictor.cpp -o predictor
+
 
 clean:
 	$(RM) predictor
