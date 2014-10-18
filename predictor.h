@@ -13,9 +13,6 @@
 
 #define RADIUS_OF_EARTH 6371009.0
 
-
-
-
 //predictor wind data sources NOAA and Portugese Meteorogical Institute
 enum data_source_type {nooa, meteo_ist};
 
@@ -23,7 +20,8 @@ enum data_source_type {nooa, meteo_ist};
 enum state_type {descending=-1,burst,ascending,landed,stop_sim};
 
 //base simulation block that represent one data point
-struct pred_block {
+struct pred_block 
+{
     enum state_type state;
     std::chrono::system_clock::time_point time; 
     double alt;
@@ -35,9 +33,9 @@ struct pred_block {
 
 
 
-
 //weather class (will deal with wind models)
-class Weather_Dataset {
+class Weather_Dataset 
+{
     //data containers
     private:
         enum data_source_type data_source;
@@ -54,10 +52,9 @@ class Weather_Dataset {
 };
 
 
-
-
 //class of prediction
-class Predictor {
+class Predictor 
+{
     //data containers 
     private:
         Weather_Dataset dataset; 
@@ -97,19 +94,5 @@ class Predictor {
         void run_sim();
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

@@ -2,7 +2,7 @@
 
 <prediction>
     <simulation_settings>
-        <timestep>1</timestep>
+        <timestep>1.0</timestep>
         <drag_coeficient>0.9</drag_coeficient>
         <burst_altitude>30000</burst_altitude>
         <ascent_rate>10.0</ascent_rate>
