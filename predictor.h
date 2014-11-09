@@ -8,6 +8,9 @@
 #include <locale>
 #include "pugixml.hpp"      //headers for xml 
 #include "pugiconfig.hpp"   
+#include "grib_api.h"       //headers for grib
+
+
 
 
 
@@ -37,7 +40,7 @@ struct pred_block
 class Weather_Dataset 
 {
     //data containers
-    private:
+    public:
         enum data_source_type data_source;
         std::string file_name;  
 
@@ -47,7 +50,7 @@ class Weather_Dataset
         void get_wind(struct pred_block *cur_block);
         
         //load dataset
-        void load(std::string in_file);
+        void load();
         void unload();
 };
 
