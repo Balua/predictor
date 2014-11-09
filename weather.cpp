@@ -24,6 +24,7 @@ void Weather_Dataset::load()
     else
     {
         std::cout << "ERROR: unable to open file "<< Weather_Dataset::file_name << std::endl;
+        return;
     }
 
         
@@ -32,6 +33,7 @@ void Weather_Dataset::load()
     if (h == NULL) 
     {
         std::cout << "ERROR: unable to create handle " << std::endl;
+        return;
     }
     else
     {
@@ -47,6 +49,7 @@ void Weather_Dataset::load()
     else
     {
         std::cout << "ERROR: unable to delete handle " << std::endl;
+        return;
     }
 
 
@@ -58,6 +61,7 @@ void Weather_Dataset::load()
     else
     {
         std::cout << "ERROR: closing file "<< Weather_Dataset::file_name << std::endl;
+        return;
     }
 
 
