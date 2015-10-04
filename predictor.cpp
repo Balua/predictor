@@ -1,5 +1,12 @@
-#include "predictor.h"
+#include <ctime>
+#include <string>
+#include <iostream>
+#include <math.h>
 
+#include "pugixml.hpp"      //headers for xml 
+#include "pugiconfig.hpp"   
+
+#include "predictor.h"
 
 
 void Predictor::read_predition_xml(double *burst_alt,double *ascent_rate,double *drag_coef,double *timestep,struct pred_block *ic_block)
