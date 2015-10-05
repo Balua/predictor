@@ -1,1 +1,6 @@
 predictor
+.cproject
+.project
+.settings/
+*.gcno
+*.gcda

@@ -93,15 +93,16 @@ void Predictor::set_altitude(struct pred_block *cur_block)
             break;
         case stop_sim:
             break;
+
     };
 }
 
 
 void Predictor::set_lat_lon(struct pred_block *cur_block)
 {
-    double ddlat;
-    double ddlon; 
-    double theta, r;
+    double ddlat=0;
+    double ddlon=0;
+    double theta=0, r=0;
 
 
     //get dd angles 

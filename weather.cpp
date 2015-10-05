@@ -18,8 +18,10 @@ void Weather_Dataset::get_wind(struct pred_block *cur_block)
 void Weather_Dataset::load()
 {
 
-    std::cout << GRI 
-    
+//	std::cout << "GRIB API ";
+//	grib_print_api_version(stdout);
+//	std::cout << std::endl;
+
     /*    int err = 0;*/
     //FILE* in = NULL;
     //grib_handle *h = NULL;
