@@ -15,6 +15,7 @@ release:
 
 clean:
 	$(RM) predictor
+	rm *.gcno *.gcda
 
 
 

@@ -79,29 +79,83 @@ void Weather_Dataset::unload()
 
 void Weather_Dataset::task()
 {
-	long int N_lat;
-	long int N_lon;
-	double   lat_min, lat_max;
-	double   lon_min, lon_max;
-	double   jDirectionIncrementInDegrees;
-	double   iDirectionIncrementInDegrees;
+	long int Nlat;
+	long int Nlon;
+	double   lat_min, lat_max, dlat;
+	double   lon_min, lon_max, dlon;
 
-	grib_get_long(m_grib_handle, "Ni", &N_lat);
-	grib_get_long(m_grib_handle, "Nj", &N_lon);
+
+
+	grib_get_long(m_grib_handle, "Ni", &Nlat);
+	grib_get_long(m_grib_handle, "Nj", &Nlon);
 	grib_get_double(m_grib_handle, "latitudeOfFirstGridPointInDegrees", &lat_min);
 	grib_get_double(m_grib_handle, "longitudeOfFirstGridPointInDegrees", &lon_min);
 	grib_get_double(m_grib_handle, "latitudeOfLastGridPointInDegrees", &lat_max);
 	grib_get_double(m_grib_handle, "longitudeOfLastGridPointInDegrees", &lon_max);
 
-	grib_get_double(m_grib_handle,"iDirectionIncrementInDegrees",&iDirectionIncrementInDegrees);
-	grib_get_double(m_grib_handle,"jDirectionIncrementInDegrees",&jDirectionIncrementInDegrees);
+	grib_get_double(m_grib_handle,"iDirectionIncrementInDegrees",&dlat);
+	grib_get_double(m_grib_handle,"jDirectionIncrementInDegrees",&dlon);
 
-	std::cout << "numberOfPointsAlongAParallel=" << N_lat << std::endl;
-	std::cout << "numberOfPointsAlongAMeridian=" << N_lon << std::endl;
+	std::cout << "numberOfPointsAlongAParallel=" << Nlat << std::endl;
+	std::cout << "numberOfPointsAlongAMeridian=" << Nlon << std::endl;
 	std::cout << "latitudeOfFirstGridPointInDegrees=" << lat_min << std::endl;
 	std::cout << "longitudeOfFirstGridPointInDegrees=" << lon_min << std::endl;
 
-	std::cout << "iDirectionIncrementInDegrees="  << iDirectionIncrementInDegrees << std::endl;
-	std::cout << "jDirectionIncrementInDegrees="  << jDirectionIncrementInDegrees << std::endl;
+	std::cout << "iDirectionIncrementInDegrees="  << dlat << std::endl;
+	std::cout << "jDirectionIncrementInDegrees="  << dlon << std::endl;
+
+
+
+	std::cout << "----------" << std::endl;
+
+	size_t len;
+	char parameterName[30];
+	grib_get_string(m_grib_handle,"name",parameterName,&len);
+	std::cout << "parameterName=" << parameterName << " len=" << len << std::endl;
+
+	grib_get_string(m_grib_handle,"units",parameterName,&len);
+	std::cout << "units=" << parameterName << " len=" << len << std::endl;
+
+	long level;
+	grib_get_long(m_grib_handle, "level", &level);
+	std::cout << "level=" << level << std::endl;
+
+	std::cout << "----------" << std::endl;
+
+
+//	hgtprs  geopotential height [gpm]
+//	 Grid {
+//	    ARRAY:
+//	      Float32 hgtprs[time = 81][lev = 26][lat = 721][lon = 1440];
+//	    MAPS:
+//	      Float64 time[time = 81];
+//	      Float64 lev[lev = 26];
+//	      Float64 lat[lat = 721];
+//	      Float64 lon[lon = 1440];
+//	  } hgtprs;
+//	U-component of wind [m/s]
+//	Grid {
+//	    ARRAY:
+//	      Float32 ugrdprs[time = 81][lev = 26][lat = 721][lon = 1440];
+//	    MAPS:
+//	      Float64 time[time = 81];
+//	      Float64 lev[lev = 26];
+//	      Float64 lat[lat = 721];
+//	      Float64 lon[lon = 1440];
+//	  } ugrdprs;
+//	V-component of wind [m/s]
+//	Grid {
+//		ARRAY:
+//		  Float32 vgrdprs[time = 81][lev = 26][lat = 721][lon = 1440];
+//		MAPS:
+//		  Float64 time[time = 81];
+//		  Float64 lev[lev = 26];
+//		  Float64 lat[lat = 721];
+//		  Float64 lon[lon = 1440];
+//	  } vgrdprs;
+
+
+
+
 
 }

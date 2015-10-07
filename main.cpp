@@ -7,10 +7,10 @@ int main(void){
 //    pred1.ic_sim();
 //    pred1.run_sim();
 
-
+	std::string f = "./data/noaa_datasets/gfs.t12z.pgrb2.0p25.anl"; //"./data/noaa_datasets/gfs.t12z.mastergrb2f00"
     
     Weather_Dataset wx;
-    wx.load("./data/noaa_datasets/gfs.t12z.mastergrb2f00");
+    wx.load(f);
 
 
     wx.task();
