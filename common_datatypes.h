@@ -16,8 +16,6 @@ enum data_source_type {nooa, meteo_ist};
 enum state_type {descending=-1,burst,ascending,landed,stop_sim};
 
 
-
-
 //base simulation block that represent one data point
 struct pred_block 
 {
