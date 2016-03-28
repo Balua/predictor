@@ -1,3 +1,6 @@
 [submodule "dependencies/pugixml"]
 	path = dependencies/pugixml
 	url = https://github.com/zeux/pugixml.git
+[submodule "dependencies/grib_api"]
+	path = dependencies/grib_api
+	url = https://github.com/edmundoferreira/grib_api.git

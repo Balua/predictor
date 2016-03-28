@@ -1,20 +1,21 @@
 ########################################################################
 #
-# Balua predictor make file.
+# Balua predictor cmake file.
 #
 ########################################################################
 
 
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 2.8)
 
 project(predictor)
 
 include_directories(dependencies/pugixml/src/)
 
-
 link_libraries(grib_api)
 
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
 
 set(SOURCE_FILES
     dependencies/pugixml/src/pugiconfig.hpp
