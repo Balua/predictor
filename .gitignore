@@ -1,10 +1,5 @@
-predictor
 .cproject
 .project
 .settings/
 *.gcno
 *.gcda
-CMakeFiles
-Makefile
-cmake_install.cmake
-CMakeCache.txt

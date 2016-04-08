@@ -1,5 +1,5 @@
 
-#include "weather.h"      
+#include "weather.h"
 #include <iostream>
 
 //destructor
@@ -36,7 +36,7 @@ void Weather_Dataset::load(std::string p_filename)
         return;
     }
 
-        
+
     //create new handle from a message in a file
     m_grib_handle = grib_handle_new_from_file(0,m_file_handle,&err);
     if (m_grib_handle == NULL)
@@ -84,10 +84,24 @@ void Weather_Dataset::task()
 	double   lat_min, lat_max, dlat;
 	double   lon_min, lon_max, dlon;
 
+	long int earth_shape;
+  long int section_number;
+	long int day, month, year;
+	long int hour, minute, second;
+	long int forecast_time;
 
+	grib_get_long(m_grib_handle, "year", &year);
+	grib_get_long(m_grib_handle, "month", &month);
+	grib_get_long(m_grib_handle, "day", &day);
+	grib_get_long(m_grib_handle, "hour", &hour);
+	grib_get_long(m_grib_handle, "minute", &minute);
+	grib_get_long(m_grib_handle, "second", &second);
 
-	grib_get_long(m_grib_handle, "Ni", &Nlat);
-	grib_get_long(m_grib_handle, "Nj", &Nlon);
+	grib_get_long(m_grib_handle, "forecastTime",&forecast_time);
+	grib_get_long(m_grib_handle, "shapeOfTheEarth", &earth_shape);
+
+	grib_get_long(m_grib_handle, "numberOfPointsAlongAParallel", &Nlat);
+	grib_get_long(m_grib_handle, "numberOfPointsAlongAMeridian", &Nlon);
 	grib_get_double(m_grib_handle, "latitudeOfFirstGridPointInDegrees", &lat_min);
 	grib_get_double(m_grib_handle, "longitudeOfFirstGridPointInDegrees", &lon_min);
 	grib_get_double(m_grib_handle, "latitudeOfLastGridPointInDegrees", &lat_max);
@@ -96,25 +110,29 @@ void Weather_Dataset::task()
 	grib_get_double(m_grib_handle,"iDirectionIncrementInDegrees",&dlat);
 	grib_get_double(m_grib_handle,"jDirectionIncrementInDegrees",&dlon);
 
+	std::cout << "----------" << std::endl;
+	std::cout <<  day << "/" << month << "/" << year  << std::endl;
+	std::cout <<  hour << "h:" << minute << "m:" << second << "s" << std::endl;
+	std::cout << "forecastTime=" << forecast_time << "h" << std::endl;
+	std::cout << "shapeOfTheEarth=" << earth_shape << std::endl;
+	std::cout << "----------" << std::endl;
 	std::cout << "numberOfPointsAlongAParallel=" << Nlat << std::endl;
 	std::cout << "numberOfPointsAlongAMeridian=" << Nlon << std::endl;
 	std::cout << "latitudeOfFirstGridPointInDegrees=" << lat_min << std::endl;
 	std::cout << "longitudeOfFirstGridPointInDegrees=" << lon_min << std::endl;
-
 	std::cout << "iDirectionIncrementInDegrees="  << dlat << std::endl;
 	std::cout << "jDirectionIncrementInDegrees="  << dlon << std::endl;
-
-
-
 	std::cout << "----------" << std::endl;
+
+
 
 	size_t len;
 	char parameterName[30];
 	grib_get_string(m_grib_handle,"name",parameterName,&len);
-	std::cout << "parameterName=" << parameterName << " len=" << len << std::endl;
+	std::cout << "parameterName=\"" << parameterName << std::endl;
 
 	grib_get_string(m_grib_handle,"units",parameterName,&len);
-	std::cout << "units=" << parameterName << " len=" << len << std::endl;
+	std::cout << "units=" << parameterName << std::endl;
 
 	long level;
 	grib_get_long(m_grib_handle, "level", &level);

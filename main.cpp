@@ -8,7 +8,7 @@ int main(void)
 //    pred1.ic_sim();
 //    pred1.run_sim();
 
-	std::string f = "./data/noaa_datasets/gfs.t12z.pgrb2.0p25.anl";
+	std::string f = "./data/noaa_datasets/gfs.t06z.pgrb2.0p25.f018";
 
     Weather_Dataset wx;
     wx.load(f);
